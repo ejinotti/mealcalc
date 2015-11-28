@@ -1,13 +1,25 @@
 from collections import defaultdict
+from itertools import product
 
 
 class Item(object):
-    def __init__(self, name, p, c, f, cal):
-        self.name = name
-        self.protein = p
-        self.carbs = c
-        self.fat = f
-        self.calories = cal
+    def __init__(self, *args):
+        if isinstance(args[0], Item):
+            self.name = args[0].name
+            self.protein = args[0].protein
+            self.carbs = args[0].carbs
+            self.fat = args[0].fat
+            self.calories = args[0].calories
+
+            for arg in args[1:]:
+                self.add(arg)
+
+        else:
+            self.name = args[0]
+            self.protein = float(args[1])
+            self.carbs = float(args[2])
+            self.fat = float(args[3])
+            self.calories = float(args[4])
 
     def __repr__(self):
         return '{}\n{}p {}c {}f {}cal'.format(
@@ -17,6 +29,14 @@ class Item(object):
             self.fat,
             self.calories,
         )
+
+    def add(self, item):
+        self.name += ' + {}'.format(item.name)
+        self.protein += item.protein
+        self.carbs += item.carbs
+        self.fat += item.fat
+        self.calories += item.calories
+
 
 meals = []
 parts = defaultdict(list)
@@ -48,22 +68,18 @@ with open('fueldata.txt', 'r') as f:
 
         buff.append(Item(*line))
 
+    for combo in product(parts['meats'], parts['carbs'], parts['veggies']):
+        meals.append(Item(*combo))
+
     print 'meals'
     for m in meals:
         print m
 
-    print '\nmeats'
-    for m in parts['meats']:
-        print m
-
-    print '\ncarbs'
-    for c in parts['carbs']:
-        print c
-
-    print '\nveggies'
-    for v in parts['veggies']:
-        print v
-
     print '\nbreakfast meals'
     for b in breakfasts:
         print b
+
+    # print '\nenter calories:',
+    # target_cals = float(raw_input())
+    # print '\nenter tolerance:',
+    # tolerance = float(raw_input())
