@@ -1,5 +1,5 @@
 from collections import defaultdict
-from itertools import product
+from itertools import product, combinations
 
 
 class Item(object):
@@ -38,6 +38,46 @@ class Item(object):
         self.calories += item.calories
 
 
+class Day(object):
+    def __init__(self, items):
+        self.calories = reduce(lambda x, i: x + i.calories, items, 0)
+        self.items = items
+
+    def in_tolerance(self, c_min, c_max):
+        return c_min < self.calories < c_max
+
+    def _calc_pcts(self):
+        self.protein = reduce(lambda x, i: x + i.protein, self.items, 0)
+        self.carbs = reduce(lambda x, i: x + i.carbs, self.items, 0)
+        self.fat = reduce(lambda x, i: x + i.fat, self.items, 0)
+
+        self.protein_pct = round(self.protein * 400.0 / self.calories, 1)
+        self.carbs_pct = round(self.carbs * 400.0 / self.calories, 1)
+        self.fat_pct = round(self.fat * 900.0 / self.calories, 1)
+
+    def in_ratio(self, ratio):
+        self._calc_pcts()
+
+        return (
+            ratio[0][0] < self.protein_pct < ratio[0][1]
+            and
+            ratio[1][0] < self.carbs_pct < ratio[1][1]
+            and
+            ratio[2][0] < self.fat_pct < ratio[2][1]
+        )
+
+    def __repr__(self):
+        return ('Day: {} total calories.\n'
+                'Macros: {}g protein {}g carb {}g fat.\n'
+                'Ratio: {}% protein {}% carb {}% fat.\n'
+                '{}'.format(
+                    self.calories,
+                    self.protein, self.carbs, self.fat,
+                    self.protein_pct, self.carbs_pct, self.fat_pct,
+                    '\n'.join([str(i) for i in self.items]),
+                ))
+
+
 meals = []
 parts = defaultdict(list)
 breakfasts = []
@@ -68,18 +108,34 @@ with open('fueldata.txt', 'r') as f:
 
         buff.append(Item(*line))
 
-    for combo in product(parts['meats'], parts['carbs'], parts['veggies']):
-        meals.append(Item(*combo))
+for p in product(parts['meats'], parts['carbs'], parts['veggies']):
+    meals.append(Item(*p))
 
-    print 'meals'
-    for m in meals:
-        print m
+print '\nenter calories:',
+targ = float(raw_input())
+print '\nenter tolerance:',
+tol = float(raw_input())
+print '\nenter ratio p/c/f (space sep):',
+ratio = map(float, raw_input().split())
+print '\nenter ratio tolerance (pct pts):',
+ratio_tol = float(raw_input())
 
-    print '\nbreakfast meals'
+c_min = targ - tol
+c_max = targ + tol
+
+ratio = [(r - ratio_tol, r + ratio_tol) for r in ratio]
+
+results = []
+
+print '\ncalculating..'
+
+for d in combinations(meals, 3):
     for b in breakfasts:
-        print b
+        day = Day((b,) + d)
 
-    # print '\nenter calories:',
-    # target_cals = float(raw_input())
-    # print '\nenter tolerance:',
-    # tolerance = float(raw_input())
+        if day.in_tolerance(c_min, c_max) and day.in_ratio(ratio):
+            results.append(day)
+
+print '\nfound {} results.\n'.format(len(results))
+
+print '\n\n'.join([str(r) for r in results[0:10]])
