@@ -5,6 +5,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+db_filename = 'mealcalc.db'
 
 
 class Meal(Base):
@@ -108,9 +109,16 @@ class Day(Base):
                 ))
 
 
-engine = sqa.create_engine('sqlite:///mealcalc.db')
+def create():
+    Base.metadata.create_all(engine)
 
-Base.metadata.create_all(engine)
+
+def destroy():
+    Base.metadata.drop_all(engine)
+
+
+engine = sqa.create_engine('sqlite:///{}'.format(db_filename))
+create()
 
 Session = sessionmaker(bind=engine)
 session = Session()
