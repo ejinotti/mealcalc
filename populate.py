@@ -1,9 +1,33 @@
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from itertools import product, combinations
 
 import sys
 
 import database as db
+
+
+class Meal(namedtuple('Meal', 'name protein carbs fat calories')):
+
+    @classmethod
+    def sum_stats(cls, meals):
+        stats = defaultdict(int)
+
+        for m in meals:
+            stats['protein'] += m.protein
+            stats['carbs'] += m.carbs
+            stats['fat'] += m.fat
+            stats['calories'] += m.calories
+
+        return stats
+
+    @classmethod
+    def combine(cls, meals):
+        name = ' + '.join([m.name for m in meals])
+        return cls(name=name, **cls.sum_stats(meals))
+
+    def __repr__(self):
+        return '{}\n{}p {}c {}f {}cal'.format(*vars(self).values())
+
 
 if len(sys.argv) != 2:
     raise Exception('Must give exactly one arg (data file name).')
@@ -23,13 +47,7 @@ with open(sys.argv[1], 'r') as f:
             key = line[0]
             continue
 
-        data[key].append(db.Meal(
-            name=line[0],
-            protein=float(line[1]),
-            carbs=float(line[2]),
-            fat=float(line[3]),
-            calories=float(line[4]),
-        ))
+        data[key].append(Meal(line[0], *map(float, line[1:])))
 
 if not data['meals']:
     raise Exception('No meals in data file.')
@@ -41,7 +59,7 @@ db.create()
 
 print 'Generating custom meals..'
 for p in product(data['proteins'], data['carbs'], data['veggies']):
-    data['meals'].append(db.Meal.from_parts(p))
+    data['meals'].append(combine(p))
 
 num_meals = len(data['meals'])
 num_combos = (num_meals * (num_meals-1) * (num_meals-2) / 6) * \
