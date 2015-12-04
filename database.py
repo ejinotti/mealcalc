@@ -34,7 +34,8 @@ class Day(Base):
                     self.calories,
                     self.protein, self.carbs, self.fat,
                     self.protein_pct, self.carbs_pct, self.fat_pct,
-                    '\n'.join([str(m) for m in self.meals]),
+                    '\n'.join(
+                        [self.meal1, self.meal2, self.meal3, self.meal4]),
                 ))
 
 

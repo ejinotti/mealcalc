@@ -7,6 +7,7 @@ import database as db
 
 
 class Meal(namedtuple('Meal', 'name protein carbs fat calories')):
+    __slots__ = ()
 
     @classmethod
     def sum_stats(cls, meals):
@@ -27,7 +28,6 @@ class Meal(namedtuple('Meal', 'name protein carbs fat calories')):
 
     def __repr__(self):
         return '{}\n{}p {}c {}f {}cal'.format(*vars(self).values())
-
 
 if len(sys.argv) != 2:
     raise Exception('Must give exactly one arg (data file name).')
@@ -59,7 +59,7 @@ db.create()
 
 print 'Generating custom meals..'
 for p in product(data['proteins'], data['carbs'], data['veggies']):
-    data['meals'].append(combine(p))
+    data['meals'].append(Meal.combine(p))
 
 num_meals = len(data['meals'])
 num_combos = (num_meals * (num_meals-1) * (num_meals-2) / 6) * \
@@ -70,25 +70,25 @@ print '{} days to generate.'.format(num_combos)
 
 print 'Generating days..'
 days = []
-i = 0
 for c in combinations(data['meals'], 3):
+
     for b in data['breakfasts']:
         meals = (b,) + c
-        d = db.Day(**db.Meal.combine(meals, with_name=False))
+        day = Meal.sum_stats(meals)
 
-        for m in meals:
-            d.meals.append(m)
+        day['protein_pct'] = round(day['protein'] * 4.0 / day['calories'], 1)
+        day['carbs_pct'] = round(day['carbs'] * 4.0 / day['calories'], 1)
+        day['fat_pct'] = round(day['fat'] * 9.0 / day['calories'], 1)
 
-        days.append(d)
+        for i, m in enumerate(meals):
+            day['meal' + str(i + 1)] = str(m)
 
-        i += 1
-        print '\r{}'.format(i),
+        days.append(day)
 
-print 'Adding meals..'
-db.session.add_all(data['meals'] + data['breakfasts'])
+    if len(days) > 10000:
+        break
 
-print 'Adding days..'
-db.session.add_all(days)
+print 'Done generating.. Inserting..'
+db.engine.execute(db.Day.__table__.insert(), days)
 
-print 'Commit..'
-db.session.commit()
+print 'Done inserting.'
