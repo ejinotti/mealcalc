@@ -70,8 +70,9 @@ print '{} days to generate.'.format(num_combos)
 
 print 'Generating days..'
 days = []
-for c in combinations(data['meals'], 3):
+total = 0
 
+for c in combinations(data['meals'], 3):
     for b in data['breakfasts']:
         meals = (b,) + c
         day = Meal.sum_stats(meals)
@@ -85,10 +86,10 @@ for c in combinations(data['meals'], 3):
 
         days.append(day)
 
-    if len(days) > 10000:
-        break
+        if len(days) >= 100000:
+            db.engine.execute(db.Day.__table__.insert(), days)
+            total += 100000
+            print total
+            days = []
 
-print 'Done generating.. Inserting..'
-db.engine.execute(db.Day.__table__.insert(), days)
-
-print 'Done inserting.'
+print 'Done.'
