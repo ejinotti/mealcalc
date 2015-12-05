@@ -4,7 +4,6 @@ from collections import defaultdict, namedtuple
 from itertools import product, combinations
 
 import time
-
 import sys
 
 import database as db
