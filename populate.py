@@ -1,6 +1,8 @@
 from collections import defaultdict, namedtuple
 from itertools import product, combinations
 
+import time
+
 import sys
 
 import database as db
@@ -52,11 +54,6 @@ with open(sys.argv[1], 'r') as f:
 if not data['meals']:
     raise Exception('No meals in data file.')
 
-db.destroy()
-print 'DB cleared..'
-
-db.create()
-
 print 'Generating custom meals..'
 for p in product(data['proteins'], data['carbs'], data['veggies']):
     data['meals'].append(Meal.combine(p))
@@ -68,28 +65,57 @@ num_combos = (num_meals * (num_meals-1) * (num_meals-2) / 6) * \
 print '{} meals.'.format(num_meals)
 print '{} days to generate.'.format(num_combos)
 
+total = 0
+batch = 100000
+
+conn = db.clear_and_get_sqlite()
+cur = conn.cursor()
+cols = db.Day.__mapper__.columns.keys()[1:]
+statement = 'INSERT INTO days ({}) VALUES ({})'.format(
+    ', '.join(cols),
+    ', '.join([c for c in ('?' * len(cols))])
+)
+
 print 'Generating days..'
 days = []
-total = 0
+t0 = time.time()
 
 for c in combinations(data['meals'], 3):
     for b in data['breakfasts']:
         meals = (b,) + c
-        day = Meal.sum_stats(meals)
+        stats = Meal.sum_stats(meals)
 
-        day['protein_pct'] = round(day['protein'] * 4.0 / day['calories'], 1)
-        day['carbs_pct'] = round(day['carbs'] * 4.0 / day['calories'], 1)
-        day['fat_pct'] = round(day['fat'] * 9.0 / day['calories'], 1)
+        vals = (
+            stats['calories'],
+            stats['protein'],
+            stats['carbs'],
+            stats['fat'],
+            stats['protein'] * 4.0 / stats['calories'],
+            stats['carbs'] * 4.0 / stats['calories'],
+            stats['fat'] * 9.0 / stats['calories'],
+            str(meals[0]),
+            str(meals[1]),
+            str(meals[2]),
+            str(meals[3]),
+        )
 
-        for i, m in enumerate(meals):
-            day['meal' + str(i + 1)] = str(m)
+        days.append(vals)
 
-        days.append(day)
+        if len(days) >= batch:
+            cur.executemany(statement, days)
 
-        if len(days) >= 100000:
-            db.engine.execute(db.Day.__table__.insert(), days)
-            total += 100000
-            print total
+            total += len(days)
             days = []
+            print total
+
+if days:
+    cur.executemany(statement, days)
+    total += len(days)
+
+conn.commit()
+
+print 'Inserted {} in {}s. Batches of {}.'.format(
+    total, time.time() - t0, batch
+)
 
 print 'Done.'

@@ -1,10 +1,13 @@
 import sqlalchemy as sqa
+import sqlite3
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 db_filename = 'mealcalc.db'
+
+expression = sqa.sql.expression
 
 
 class Day(Base):
@@ -39,16 +42,33 @@ class Day(Base):
                 ))
 
 
-def create():
+def clear_and_get_sqlite():
+    conn = sqlite3.connect(db_filename)
+    c = conn.cursor()
+    c.execute('DROP TABLE IF EXISTS days')
+    c.execute("""
+        CREATE TABLE days(
+            id INTEGER NOT NULL,
+            calories REAL,
+            protein REAL,
+            carbs REAL,
+            fat REAL,
+            protein_pct REAL,
+            carbs_pct REAL,
+            fat_pct REAL,
+            meal1 VARCHAR(255),
+            meal2 VARCHAR(255),
+            meal3 VARCHAR(255),
+            meal4 VARCHAR(255),
+            PRIMARY KEY(id)
+        )
+    """)
+    conn.commit()
+    return conn
+
+
+def get_orm_session():
+    engine = sqa.create_engine('sqlite:///' + db_filename)
     Base.metadata.create_all(engine)
-
-
-def destroy():
-    Base.metadata.drop_all(engine)
-
-
-engine = sqa.create_engine('sqlite:///{}'.format(db_filename))
-create()
-
-Session = sessionmaker(bind=engine)
-session = Session()
+    Session = sessionmaker(bind=engine)
+    return Session()
