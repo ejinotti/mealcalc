@@ -117,7 +117,6 @@ if days:
 conn.commit()
 
 print 'Inserted {} in {}s. Batches of {}.'.format(
-    total, time.time() - t0, batch
-)
+    total, round(time.time() - t0, 1), batch)
 
 print 'Done.'

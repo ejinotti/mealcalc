@@ -39,11 +39,12 @@ while True:
     print 'protein_pct {}% ~ {}%'.format(p_min, p_max)
     print 'carbs_pct {}% ~ {}%'.format(c_min, c_max)
     print 'fat_pct {}% ~ {}%'.format(f_min, f_max)
-    print 'querying..'
+    print '\nquerying..'
 
     t0 = time.time()
     results = q.all()
-    print 'Found {} results in {}s.'.format(len(results), time.time() - t0)
+    print 'Found {} results in {}s.'.format(
+        len(results), round(time.time() - t0, 1))
 
     print 'Show results? (y/n):',
     if raw_input().lower() == 'y':
