@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from collections import defaultdict, namedtuple
 from itertools import product, combinations
 
@@ -90,9 +92,9 @@ for c in combinations(data['meals'], 3):
             stats['protein'],
             stats['carbs'],
             stats['fat'],
-            stats['protein'] * 4.0 / stats['calories'],
-            stats['carbs'] * 4.0 / stats['calories'],
-            stats['fat'] * 9.0 / stats['calories'],
+            stats['protein'] * 400.0 / stats['calories'],
+            stats['carbs'] * 400.0 / stats['calories'],
+            stats['fat'] * 900.0 / stats['calories'],
             str(meals[0]),
             str(meals[1]),
             str(meals[2]),
