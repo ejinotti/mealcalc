@@ -106,4 +106,18 @@ for c in combinations(data['meals'], 3):
 print '\nfound {} results in {}s.\n'.format(
     len(results), round(time.time() - t0, 1))
 
-print '\n\n'.join([str(r) for r in results[0:10]])
+print '\nprint how many results?',
+n = int(raw_input())
+
+for r in results[:n]:
+    print 'Day\n'
+    print 'calories = {}'.format(r['calories'])
+    print '{}% prot {}% carb {}% fat'.format(
+        round(r['protein_pct'], 1),
+        round(r['carbs_pct'], 1),
+        round(r['fat_pct'], 1))
+    print '{}g prot {}g carb {}g fat'.format(
+        r['protein'],
+        r['carbs'],
+        r['fat'])
+    print '\n'.join([r['meal' + str(i)] for i in range(1, 5)])
