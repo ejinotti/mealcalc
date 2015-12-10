@@ -5,36 +5,7 @@
     <title>MealCalc</title>
   </head>
   <body>
-    <h1>Meals</h1>
-    <ul>
-      {% for meal in meals %}
-      <li>{{ ', '.join(meal.__dict__.values()) }}</li>
-      {% endfor %}
-    </ul>
-    <h1>Proteins</h1>
-    <ul>
-      {% for protein in proteins %}
-      <li>{{ ', '.join(protein.__dict__.values()) }}</li>
-      {% endfor %}
-    </ul>
-    <h1>Carbs</h1>
-    <ul>
-      {% for carb in carbs %}
-      <li>{{ ', '.join(carb.__dict__.values()) }}</li>
-      {% endfor %}
-    </ul>
-    <h1>Veggies</h1>
-    <ul>
-      {% for veggie in veggies %}
-      <li>{{ ', '.join(veggie.__dict__.values()) }}</li>
-      {% endfor %}
-    </ul>
-    <h1>breakfasts</h1>
-    <ul>
-      {% for breakfast in breakfasts %}
-      <li>{{ ', '.join(breakfast.__dict__.values()) }}</li>
-      {% endfor %}
-    </ul>
+    <h1>Helloes!</h1>
 
     <script src="{{ url_for('static', filename='mealcalc.js') }}"></script>
   </body>

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from collections import namedtuple, defaultdict
 
 
@@ -23,18 +23,23 @@ def readfile(f):
             key = line[0]
             continue
 
-        data[key].append(Item(*line))
+        data[key].append(vars(Item(*line)))
 
     return data
+
+
+@app.route('/data', methods=['GET'])
+def data():
+    with app.open_resource('fueldata.txt', 'r') as f:
+        data = readfile(f)
+
+    return jsonify(**data)
 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
-    with app.open_resource('fueldata.txt', 'r') as f:
-        data = readfile(f)
-
-    return render_template('./index.html', **data)
+    return render_template('./index.html')
 
 
 app.run(debug=True)
