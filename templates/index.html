@@ -1,7 +1,7 @@
 <html>
   <head>
     <link rel="shortcut icon"
-          href="{{ url_for('favicon', filename='favicon.ico') }}">
+          href="{{ url_for('static', filename='favicon.ico') }}">
     <title>MealCalc</title>
   </head>
   <body>
@@ -35,5 +35,7 @@
       <li>{{ ', '.join(breakfast.__dict__.values()) }}</li>
       {% endfor %}
     </ul>
+
+    <script src="{{ url_for('static', filename='mealcalc.js') }}"></script>
   </body>
 </html>

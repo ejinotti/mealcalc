@@ -1,0 +1,26 @@
+{
+  "name": "mealcalc",
+  "version": "0.0.1",
+  "description": "script to calculate some daily meal combos..",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify mealcalc.js -o static/mealcalc.js",
+    "watch": "watchify mealcalc.js -o static/mealcalc.js --debug --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ejinotti/mealcalc.git"
+  },
+  "author": "Edward J. Jinotti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ejinotti/mealcalc/issues"
+  },
+  "homepage": "https://github.com/ejinotti/mealcalc#readme",
+  "dependencies": {
+    "browserify": "^12.0.1",
+    "jquery": "^1.11.3",
+    "watchify": "^3.6.1"
+  }
+}
