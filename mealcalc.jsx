@@ -1,5 +1,6 @@
 (function (window) {
   window.React = require('react');
+  window.ReactDOM = require('react-dom');
   window.agent = require('superagent');
 
   var CustomMealBox = React.createClass({
@@ -84,7 +85,7 @@
       var carbs = result.body.carbs.map(convert);
       var veggies = result.body.veggies.map(convert);
 
-      React.render(
+      ReactDOM.render(
         <CustomMealBox proteins={proteins} carbs={carbs} veggies={veggies} />,
         document.getElementById('main-content')
       );
