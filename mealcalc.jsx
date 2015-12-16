@@ -28,11 +28,17 @@
       return (
         <div>
           <CustomMealSelect items={this.props.proteins}
+                            index={this.state.p}
                             update={this.update('p')} />
+
           <CustomMealSelect items={this.props.carbs}
+                            index={this.state.c}
                             update={this.update('c')} />
+
           <CustomMealSelect items={this.props.veggies}
+                            index={this.state.v}
                             update={this.update('v')} />
+
           <p>Total calories = {calories.toFixed(1)}</p>
           <p>Total protein = {protein.toFixed(1)}g</p>
           <p>Total carbs = {carbs.toFixed(1)}g</p>
@@ -43,16 +49,12 @@
   });
 
   var CustomMealSelect = React.createClass({
-    getInitialState: function () {
-      return {value: 0};
-    },
     handleChange: function (e) {
-      this.setState({value: e.target.value});
       this.props.update(e.target.value);
     },
     render: function () {
       return (
-        <select value={this.state.value} onChange={this.handleChange}>
+        <select value={this.props.index} onChange={this.handleChange}>
           {
             this.props.items.map(function (item, i) {
               return (
