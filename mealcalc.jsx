@@ -96,6 +96,24 @@
     }
   });
 
+  // var MealList = React.createClass({
+  //
+  // });
+  //
+  // var Meal = React.createClass({
+  //
+  // });
+
+  var MealCalcApp = React.createClass({
+    render: function () {
+      return (
+        <CustomMealBox proteins={this.props.data.proteins}
+                       carbs={this.props.data.carbs}
+                       veggies={this.props.data.veggies} />
+      );
+    }
+  });
+
   agent
     .get('/data')
     .end(function (err, result) {
@@ -109,12 +127,14 @@
         };
       }
 
-      var proteins = result.body.proteins.map(convert);
-      var carbs = result.body.carbs.map(convert);
-      var veggies = result.body.veggies.map(convert);
+      var data = {};
+
+      Object.keys(result.body).forEach(function (k) {
+        data[k] = result.body[k].map(convert);
+      });
 
       ReactDOM.render(
-        <CustomMealBox proteins={proteins} carbs={carbs} veggies={veggies} />,
+        <MealCalcApp data={data} />,
         document.getElementById('main-content')
       );
     });
