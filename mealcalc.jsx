@@ -3,6 +3,35 @@
   window.ReactDOM = require('react-dom');
   window.agent = require('superagent');
 
+  function calcStats(items) {
+    var stats = {
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0,
+    };
+
+    items.forEach(function (i) {
+      stats.calories += i.calories;
+      stats.protein += i.protein;
+      stats.carbs += i.carbs;
+      stats.fat += i.fat;
+    });
+
+    return stats;
+  }
+
+  var PrettyNumber = React.createClass({
+    render: function () {
+      var parts = this.props.n.toFixed(1).split('.');
+      return (
+        <span>
+          {parts[0]}.<small>{parts[1]}</small>
+        </span>
+      );
+    }
+  });
+
   var CustomMealBox = React.createClass({
     getInitialState: function () {
       return {p: 0, c: 0, v: 0};
@@ -17,14 +46,11 @@
       };
     },
     render: function () {
-      var p = this.props.proteins[this.state.p];
-      var c = this.props.carbs[this.state.c];
-      var v = this.props.veggies[this.state.v];
-
-      var calories = p.calories + c.calories + v.calories;
-      var protein = p.protein + c.protein + v.protein;
-      var carbs = p.carbs + c.carbs + v.carbs;
-      var fat = p.fat + c.fat + v.fat;
+      var stats = calcStats([
+        this.props.proteins[this.state.p],
+        this.props.carbs[this.state.c],
+        this.props.veggies[this.state.v]
+      ]);
 
       return (
         <div>
@@ -40,10 +66,12 @@
                             index={this.state.v}
                             update={this.update('v')} />
 
-          <p>Total calories = {calories.toFixed(1)}</p>
-          <p>Total protein = {protein.toFixed(1)}g</p>
-          <p>Total carbs = {carbs.toFixed(1)}g</p>
-          <p>Total fat = {fat.toFixed(1)}g</p>
+          <p>
+            <PrettyNumber n={stats.protein} />g-protein&nbsp;
+            <PrettyNumber n={stats.carbs} />g-carbs&nbsp;
+            <PrettyNumber n={stats.fat} />g-fat&nbsp;
+            (<PrettyNumber n={stats.calories} /> cals)
+          </p>
         </div>
       );
     }
