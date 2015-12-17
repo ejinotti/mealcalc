@@ -32,6 +32,19 @@
     }
   });
 
+  var Meal = React.createClass({
+    render: function () {
+      return (
+        <p>
+          <PrettyNumber n={this.props.stats.protein} />g-protein&nbsp;
+          <PrettyNumber n={this.props.stats.carbs} />g-carbs&nbsp;
+          <PrettyNumber n={this.props.stats.fat} />g-fat&nbsp;
+          (<PrettyNumber n={this.props.stats.calories} /> cals)
+        </p>
+      );
+    }
+  });
+
   var CustomMealBox = React.createClass({
     getInitialState: function () {
       return {p: 0, c: 0, v: 0};
@@ -66,12 +79,7 @@
                             index={this.state.v}
                             update={this.update('v')} />
 
-          <p>
-            <PrettyNumber n={stats.protein} />g-protein&nbsp;
-            <PrettyNumber n={stats.carbs} />g-carbs&nbsp;
-            <PrettyNumber n={stats.fat} />g-fat&nbsp;
-            (<PrettyNumber n={stats.calories} /> cals)
-          </p>
+          <Meal stats={stats} />
         </div>
       );
     }
@@ -96,20 +104,31 @@
     }
   });
 
-  // var MealList = React.createClass({
-  //
-  // });
-  //
-  // var Meal = React.createClass({
-  //
-  // });
+  var MealList = React.createClass({
+    render: function () {
+      return (
+        <ul>
+          {
+            this.props.meals.map(function (meal, i) {
+              return (
+                <li key={i}><Meal stats={meal} /></li>
+              );
+            })
+          }
+        </ul>
+      );
+    }
+  });
 
   var MealCalcApp = React.createClass({
     render: function () {
       return (
-        <CustomMealBox proteins={this.props.data.proteins}
-                       carbs={this.props.data.carbs}
-                       veggies={this.props.data.veggies} />
+        <div>
+          <CustomMealBox proteins={this.props.data.proteins}
+            carbs={this.props.data.carbs}
+            veggies={this.props.data.veggies} />
+          <MealList meals={this.props.data.meals} />
+        </div>
       );
     }
   });
