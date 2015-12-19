@@ -1,0 +1,27 @@
+html, body, section, article,
+h1, h2, h3, h4, p, strong, em, a, ul, li {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  font: inherit;
+  text-decoration: inherit;
+  text-align: inherit;
+  color: inherit;
+  background: transparent;
+}
+
+body {
+  background: whitesmoke;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+ul {
+  list-style: none;
+}
+
+.meal small {
+  position: relative;
+  bottom: 1px;
+}

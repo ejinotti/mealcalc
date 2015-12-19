@@ -33,7 +33,7 @@
   var Meal = React.createClass({
     render: function () {
       return (
-        <div>
+        <div className="meal">
           <div>{this.props.name}</div>
           <PrettyNumber n={this.props.stats.protein} />g-protein&nbsp;
           <PrettyNumber n={this.props.stats.carbs} />g-carbs&nbsp;
