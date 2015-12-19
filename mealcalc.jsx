@@ -25,9 +25,7 @@
     render: function () {
       var parts = this.props.n.toFixed(1).split('.');
       return (
-        <span>
-          {parts[0]}.<small>{parts[1]}</small>
-        </span>
+        <span>{parts[0]}.<small>{parts[1]}</small></span>
       );
     }
   });
@@ -35,12 +33,13 @@
   var Meal = React.createClass({
     render: function () {
       return (
-        <p>
+        <div>
+          <div>{this.props.name}</div>
           <PrettyNumber n={this.props.stats.protein} />g-protein&nbsp;
           <PrettyNumber n={this.props.stats.carbs} />g-carbs&nbsp;
           <PrettyNumber n={this.props.stats.fat} />g-fat&nbsp;
           (<PrettyNumber n={this.props.stats.calories} /> cals)
-        </p>
+        </div>
       );
     }
   });
@@ -59,27 +58,33 @@
       };
     },
     render: function () {
-      var stats = calcStats([
+      var items = [
         this.props.proteins[this.state.p],
         this.props.carbs[this.state.c],
         this.props.veggies[this.state.v]
-      ]);
+      ];
+
+      var stats = calcStats(items);
+      var name = items.map(function (i) { return i.name; }).join(' + ');
 
       return (
         <div>
-          <CustomMealSelect items={this.props.proteins}
-                            index={this.state.p}
-                            update={this.update('p')} />
+          <CustomMealSelect
+            items={this.props.proteins}
+            index={this.state.p}
+            update={this.update('p')} />
 
-          <CustomMealSelect items={this.props.carbs}
-                            index={this.state.c}
-                            update={this.update('c')} />
+          <CustomMealSelect
+            items={this.props.carbs}
+            index={this.state.c}
+            update={this.update('c')} />
 
-          <CustomMealSelect items={this.props.veggies}
-                            index={this.state.v}
-                            update={this.update('v')} />
+          <CustomMealSelect
+            items={this.props.veggies}
+            index={this.state.v}
+            update={this.update('v')} />
 
-          <Meal stats={stats} />
+          <Meal stats={stats} name={name} />
         </div>
       );
     }
@@ -111,7 +116,7 @@
           {
             this.props.meals.map(function (meal, i) {
               return (
-                <li key={i}><Meal stats={meal} /></li>
+                <li key={i}><Meal stats={meal} name={meal.name} /></li>
               );
             })
           }
@@ -124,10 +129,21 @@
     render: function () {
       return (
         <div>
-          <CustomMealBox proteins={this.props.data.proteins}
-            carbs={this.props.data.carbs}
-            veggies={this.props.data.veggies} />
-          <MealList meals={this.props.data.meals} />
+          <div style={{width: '50%', float: 'left'}}>
+            <CustomMealBox
+              proteins={this.props.data.proteins}
+              carbs={this.props.data.carbs}
+              veggies={this.props.data.veggies} />
+            <MealList meals={this.props.data.meals} />
+          </div>
+          <div>
+            <p>right panel</p>
+            <p>right panel</p>
+            <p>right panel</p>
+            <p>right panel</p>
+            <p>right panel</p>
+            <p>right panel</p>
+          </div>
         </div>
       );
     }
