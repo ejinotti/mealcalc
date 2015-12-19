@@ -23,9 +23,27 @@
 
   var PrettyNumber = React.createClass({
     render: function () {
-      var parts = this.props.n.toFixed(1).split('.');
+      var field = this.props.field;
+      var number = this.props.stats[field];
+      var parts = number.toFixed(1).split('.');
+
+      if (field === 'calories') {
+        return (
+          <p className="stat stat-calories">
+            {parts[0]}.<small>{parts[1]}</small> cal
+          </p>
+        );
+      }
+
+      var cVal = field === 'fat' ? 9 : 4;
+      var width = Math.floor(
+        number * cVal * 100 / this.props.stats.calories
+      ).toFixed(1) + '%';
+
       return (
-        <span>{parts[0]}.<small>{parts[1]}</small></span>
+        <p className={'stat stat-' + field} style={{width: width}}>
+          {parts[0]}.<small>{parts[1]}</small>g
+        </p>
       );
     }
   });
@@ -33,12 +51,14 @@
   var Meal = React.createClass({
     render: function () {
       return (
-        <div className="meal">
-          <div>{this.props.name}</div>
-          <PrettyNumber n={this.props.stats.protein} />g-protein&nbsp;
-          <PrettyNumber n={this.props.stats.carbs} />g-carbs&nbsp;
-          <PrettyNumber n={this.props.stats.fat} />g-fat&nbsp;
-          (<PrettyNumber n={this.props.stats.calories} /> cals)
+        <div className="meal clear">
+          <h6>
+            {this.props.name}
+            <PrettyNumber stats={this.props.stats} field={'calories'} />
+          </h6>
+          <PrettyNumber stats={this.props.stats} field={'protein'} />
+          <PrettyNumber stats={this.props.stats} field={'carbs'} />
+          <PrettyNumber stats={this.props.stats} field={'fat'} />
         </div>
       );
     }

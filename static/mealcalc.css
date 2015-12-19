@@ -1,5 +1,5 @@
 html, body, section, article,
-h1, h2, h3, h4, p, strong, em, a, ul, li {
+h1, h2, h3, h4, h5, h6, p, strong, em, a, ul, li {
   margin: 0;
   border: 0;
   padding: 0;
@@ -21,7 +21,35 @@ ul {
   list-style: none;
 }
 
+.clear:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.meal {
+  width: 400px;
+  border: 1px dotted gray;
+  border-radius: 3px;
+}
+
 .meal small {
   position: relative;
   bottom: 1px;
+}
+
+.meal > .stat {
+  float: left;
+}
+
+.stat-protein {
+  background: blue;
+}
+
+.stat-carbs {
+  background: green;
+}
+
+.stat-fat {
+  background: red;
 }
