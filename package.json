@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify -t reactify mealcalc.jsx > static/mealcalc.js",
-    "watch": "watchify mealcalc.jsx -o static/mealcalc.js --debug --verbose"
+    "build": "browserify -t reactify mealcalc.jsx -o static/mealcalc.js",
+    "watch": "watchify -t reactify mealcalc.jsx -o static/mealcalc.js -v"
   },
   "repository": {
     "type": "git",
