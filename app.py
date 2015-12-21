@@ -23,7 +23,9 @@ def readfile(f):
             key = line[0]
             continue
 
-        data[key].append(vars(Item(*line)))
+        data[key].append(vars(Item(
+            *([line[0]] + map(float, line[1:]))
+        )))
 
     return data
 

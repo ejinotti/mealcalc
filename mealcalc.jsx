@@ -172,24 +172,9 @@
   agent
     .get('/data')
     .end(function (err, result) {
-      function convert(i) {
-        return {
-          name: i.name,
-          calories: Number(i.calories),
-          protein: Number(i.protein),
-          carbs: Number(i.carbs),
-          fat: Number(i.fat)
-        };
-      }
-
-      var data = {};
-
-      Object.keys(result.body).forEach(function (k) {
-        data[k] = result.body[k].map(convert);
-      });
 
       ReactDOM.render(
-        <MealCalcApp data={data} />,
+        <MealCalcApp data={result.body} />,
         document.getElementById('main-content')
       );
     });
