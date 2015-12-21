@@ -21,6 +21,10 @@
     return stats;
   }
 
+  function calcWidth(macro, calsg, totalCal) {
+    return Math.round(macro * calsg * 100 / totalCal);
+  }
+
   var PrettyNumber = React.createClass({
     render: function () {
       var field = this.props.field;
@@ -35,10 +39,21 @@
         );
       }
 
-      var cVal = field === 'fat' ? 9 : 4;
-      var width = Math.floor(
-        number * cVal * 100 / this.props.stats.calories
-      ).toFixed(1) + '%';
+      var width;
+      var cals = this.props.stats.calories;
+
+      // show remainder as fat to give 100% width..
+      if (field === 'fat') {
+        var p = this.props.stats.protein;
+        var c = this.props.stats.carbs;
+
+        width = 100 - calcWidth(p, 4, cals) - calcWidth(c, 4, cals);
+
+      } else {
+        width = calcWidth(number, 4, cals);
+      }
+
+      width = width.toFixed(1) + '%';
 
       return (
         <p className={'stat stat-' + field} style={{width: width}}>
