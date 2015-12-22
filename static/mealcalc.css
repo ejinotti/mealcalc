@@ -29,27 +29,36 @@ ul {
 
 .meal {
   width: 400px;
-  border: 1px dotted gray;
+  border: 1px solid gray;
   border-radius: 3px;
+  margin: 10px 0;
 }
 
-.meal small {
-  position: relative;
-  bottom: 1px;
+.meal > div:first-child {
+  padding: 2px 5px;
 }
 
-.meal > .stat {
+.meal p:not(.calories) {
+  font-size: small
+}
+
+.meal .calories {
+  float: right;
+  padding: 2px 5px;
+}
+
+.meal .spacer {
   float: left;
 }
 
-.stat-protein {
-  background: blue;
+.spacer-protein {
+  background: skyblue;
 }
 
-.stat-carbs {
-  background: green;
+.spacer-carbs {
+  background: lawngreen;
 }
 
-.stat-fat {
-  background: red;
+.spacer-fat {
+  background: tomato;
 }

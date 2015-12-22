@@ -27,17 +27,18 @@
 
   var PrettyNumber = React.createClass({
     render: function () {
+      var parts = this.props.number.toFixed(1).split('.');
+
+      return (
+        <span>{parts[0]}.<small>{parts[1]}</small></span>
+      );
+    }
+  });
+
+  var Spacer = React.createClass({
+    render: function () {
       var field = this.props.field;
       var number = this.props.stats[field];
-      var parts = number.toFixed(1).split('.');
-
-      if (field === 'calories') {
-        return (
-          <p className="stat stat-calories">
-            {parts[0]}.<small>{parts[1]}</small> cal
-          </p>
-        );
-      }
 
       var width;
       var cals = this.props.stats.calories;
@@ -56,9 +57,9 @@
       width = width.toFixed(1) + '%';
 
       return (
-        <p className={'stat stat-' + field} style={{width: width}}>
-          {parts[0]}.<small>{parts[1]}</small>g
-        </p>
+        <span className={'spacer spacer-' + field} style={{width: width}}>
+          &nbsp;
+        </span>
       );
     }
   });
@@ -66,14 +67,23 @@
   var Meal = React.createClass({
     render: function () {
       return (
-        <div className="meal clear">
-          <h6>
-            {this.props.name}
-            <PrettyNumber stats={this.props.stats} field={'calories'} />
-          </h6>
-          <PrettyNumber stats={this.props.stats} field={'protein'} />
-          <PrettyNumber stats={this.props.stats} field={'carbs'} />
-          <PrettyNumber stats={this.props.stats} field={'fat'} />
+        <div className="meal">
+          <div className="clear">
+            <p className="calories">
+              <PrettyNumber number={this.props.stats.calories} /> cal
+            </p>
+            <p>{this.props.name}</p>
+            <p className="stats">
+              <PrettyNumber number={this.props.stats.protein} />g protein&nbsp;
+              <PrettyNumber number={this.props.stats.carbs} />g carbs&nbsp;
+              <PrettyNumber number={this.props.stats.fat} />g fat&nbsp;
+            </p>
+          </div>
+          <div className="clear">
+            <Spacer stats={this.props.stats} field={'protein'} />
+            <Spacer stats={this.props.stats} field={'carbs'} />
+            <Spacer stats={this.props.stats} field={'fat'} />
+          </div>
         </div>
       );
     }
