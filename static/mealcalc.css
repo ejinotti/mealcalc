@@ -27,6 +27,18 @@ ul {
   clear: both;
 }
 
+.mc-panel {
+  width: 50%;
+  float: left;
+}
+
+@media only screen and (max-width: 861px) {
+  .mc-panel {
+    width: auto;
+    float: none;
+  }
+}
+
 .meal {
   width: 400px;
   border: 1px solid gray;

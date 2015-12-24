@@ -173,15 +173,15 @@
   var MealCalcApp = React.createClass({
     render: function () {
       return (
-        <div>
-          <div style={{width: '50%', float: 'left'}}>
+        <div className="clear">
+          <div className="mc-panel">
             <CustomMealBox
               proteins={this.props.data.proteins}
               carbs={this.props.data.carbs}
               veggies={this.props.data.veggies} />
             <MealList meals={this.props.data.meals} />
           </div>
-          <div>
+          <div className="mc-panel">
             <p>right panel</p>
             <p>right panel</p>
             <p>right panel</p>
