@@ -67,22 +67,22 @@
   var Meal = React.createClass({
     render: function () {
       return (
-        <div className="meal">
+        <div className="meal" onClick={this.props.click}>
           <div className="clear">
             <p className="calories">
-              <PrettyNumber number={this.props.stats.calories} /> cal
+              <PrettyNumber number={this.props.meal.calories} /> cal
             </p>
-            <p>{this.props.name}</p>
+            <p>{this.props.meal.name}</p>
             <p className="stats">
-              <PrettyNumber number={this.props.stats.protein} />g protein&nbsp;
-              <PrettyNumber number={this.props.stats.carbs} />g carbs&nbsp;
-              <PrettyNumber number={this.props.stats.fat} />g fat&nbsp;
+              <PrettyNumber number={this.props.meal.protein} />g protein&nbsp;
+              <PrettyNumber number={this.props.meal.carbs} />g carbs&nbsp;
+              <PrettyNumber number={this.props.meal.fat} />g fat&nbsp;
             </p>
           </div>
           <div className="clear">
-            <Spacer stats={this.props.stats} field={'protein'} />
-            <Spacer stats={this.props.stats} field={'carbs'} />
-            <Spacer stats={this.props.stats} field={'fat'} />
+            <Spacer stats={this.props.meal} field={'protein'} />
+            <Spacer stats={this.props.meal} field={'carbs'} />
+            <Spacer stats={this.props.meal} field={'fat'} />
           </div>
         </div>
       );
@@ -109,8 +109,8 @@
         this.props.veggies[this.state.v]
       ];
 
-      var stats = calcStats(items);
-      var name = items.map(function (i) { return i.name; }).join(' + ');
+      var meal = calcStats(items);
+      meal.name = items.map(function (i) { return i.name; }).join(' + ');
 
       return (
         <div>
@@ -129,7 +129,7 @@
             index={this.state.v}
             update={this.update('v')} />
 
-          <Meal stats={stats} name={name} />
+          <Meal meal={meal} click={this.props.clickfn(meal)} />
         </div>
       );
     }
@@ -156,12 +156,18 @@
 
   var MealList = React.createClass({
     render: function () {
+      var self = this;
+
       return (
         <ul>
           {
             this.props.meals.map(function (meal, i) {
               return (
-                <li key={i}><Meal stats={meal} name={meal.name} /></li>
+                <li key={i}>
+                  <Meal
+                    meal={meal}
+                    click={self.props.clickfn(meal, i)} />
+                </li>
               );
             })
           }
@@ -171,8 +177,25 @@
   });
 
   var MealCalcApp = React.createClass({
+    getInitialState: function () {
+      return {selectedMeals: []};
+    },
+    addMeal: function (meal, i) {
+      return function () {
+        var meals = this.state.selectedMeals;
+        meals.push(meal);
+        this.setState({selectedMeals: meals});
+      }.bind(this);
+    },
+    removeMeal: function (meal, i) {
+      return function () {
+        var meals = this.state.selectedMeals;
+        meals.splice(i, 1);
+        this.setState({selectedMeals: meals});
+      }.bind(this);
+    },
     render: function () {
-      var mealList = this.props.data.meals.concat(this.props.data.breakfasts);
+      var list = this.props.data.meals.concat(this.props.data.breakfasts);
 
       return (
         <div className="clear">
@@ -180,16 +203,16 @@
             <CustomMealBox
               proteins={this.props.data.proteins}
               carbs={this.props.data.carbs}
-              veggies={this.props.data.veggies} />
-            <MealList meals={mealList} />
+              veggies={this.props.data.veggies}
+              clickfn={this.addMeal} />
+            <MealList
+              meals={list}
+              clickfn={this.addMeal} />
           </div>
           <div className="mc-panel">
-            <p>right panel</p>
-            <p>right panel</p>
-            <p>right panel</p>
-            <p>right panel</p>
-            <p>right panel</p>
-            <p>right panel</p>
+            <MealList
+              meals={this.state.selectedMeals}
+              clickfn={this.removeMeal} />
           </div>
         </div>
       );
