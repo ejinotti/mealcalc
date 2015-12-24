@@ -172,6 +172,8 @@
 
   var MealCalcApp = React.createClass({
     render: function () {
+      var mealList = this.props.data.meals.concat(this.props.data.breakfasts);
+
       return (
         <div className="clear">
           <div className="mc-panel">
@@ -179,7 +181,7 @@
               proteins={this.props.data.proteins}
               carbs={this.props.data.carbs}
               veggies={this.props.data.veggies} />
-            <MealList meals={this.props.data.meals} />
+            <MealList meals={mealList} />
           </div>
           <div className="mc-panel">
             <p>right panel</p>
@@ -197,6 +199,7 @@
   agent
     .get('/data')
     .end(function (err, result) {
+      console.log(result.body);
 
       ReactDOM.render(
         <MealCalcApp data={result.body} />,
