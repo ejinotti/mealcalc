@@ -44,6 +44,11 @@ ul {
   padding: 2px 5px;
 }
 
+.meal > div:first-child p {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .meal p:not(.calories) {
   font-size: small
 }
