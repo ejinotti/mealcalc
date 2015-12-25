@@ -196,6 +196,14 @@
     },
     render: function () {
       var list = this.props.data.meals.concat(this.props.data.breakfasts);
+      var selected = this.state.selectedMeals;
+      var day = '';
+
+      if (selected.length) {
+        var meal = calcStats(selected);
+        meal.name = 'DAY';
+        day = <Meal meal={meal} />;
+      }
 
       return (
         <div className="clear">
@@ -210,6 +218,7 @@
               clickfn={this.addMeal} />
           </div>
           <div className="mc-panel">
+            {day}
             <MealList
               meals={this.state.selectedMeals}
               clickfn={this.removeMeal} />
