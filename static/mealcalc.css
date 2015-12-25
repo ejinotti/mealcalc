@@ -39,7 +39,20 @@ ul {
   }
 }
 
-#clear-btn:hover {
+#total-display {
+  text-align: center;
+  display: inline-block;
+}
+
+#total-display button {
+  background: inherit;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+#total-display button:hover {
+  background: silver;
+  color: white;
   cursor: pointer;
 }
 
@@ -48,6 +61,7 @@ ul {
   border: 1px solid gray;
   border-radius: 3px;
   margin: 10px 0;
+  text-align: left;
 }
 
 .meal:not(.total):hover {
