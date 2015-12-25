@@ -22,7 +22,7 @@
   }
 
   function calcWidth(macro, calsg, totalCal) {
-    return Math.round(macro * calsg * 100 / totalCal);
+    return Math.round(macro * calsg * 1000 / totalCal) / 10;
   }
 
   var PrettyNumber = React.createClass({
@@ -54,13 +54,21 @@
         width = calcWidth(number, 4, cals);
       }
 
-      width = width.toFixed(1) + '%';
+      var widthText = width.toFixed(1) + '%';
 
-      return (
-        <span className={'spacer spacer-' + field} style={{width: width}}>
-          &nbsp;
-        </span>
-      );
+      if (width < 12) {
+        return (
+          <span className={'spacer spacer-' + field} style={{width: widthText}}>
+            &nbsp;
+          </span>
+        );
+      } else {
+        return (
+          <span className={'spacer spacer-' + field} style={{width: widthText}}>
+            <PrettyNumber number={width} />%
+          </span>
+        );
+      }
     }
   });
 

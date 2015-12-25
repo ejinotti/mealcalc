@@ -90,6 +90,9 @@ ul {
 
 .meal .spacer {
   float: left;
+  font-size: small;
+  padding: 2px 0;
+  text-align: center;
 }
 
 .spacer-protein {
