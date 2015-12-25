@@ -39,6 +39,10 @@ ul {
   }
 }
 
+#clear-btn:hover {
+  cursor: pointer;
+}
+
 .meal {
   width: 400px;
   border: 1px solid gray;

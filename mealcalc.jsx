@@ -200,15 +200,21 @@
         this.setState({selectedMeals: meals});
       }.bind(this);
     },
+    clear: function () {
+      this.setState({selectedMeals: []});
+    },
     render: function () {
       var list = this.props.data.meals.concat(this.props.data.breakfasts);
       var selected = this.state.selectedMeals;
       var total = '';
+      var clearBtn = '';
 
       if (selected.length) {
         var meal = calcStats(selected);
         meal.name = 'TOTAL';
         total = <Meal meal={meal} />;
+        clearBtn = <button id="clear-btn"
+          onClick={this.clear}>CLEAR ALL</button>;
       }
 
       return (
@@ -225,6 +231,7 @@
           </div>
           <div className="mc-panel">
             {total}
+            {clearBtn}
             <MealList
               meals={this.state.selectedMeals}
               clickfn={this.removeMeal} />
