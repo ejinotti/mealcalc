@@ -46,7 +46,7 @@ ul {
   margin: 10px 0;
 }
 
-.meal:hover {
+.meal:not(.total):hover {
   background: silver;
   color: white;
   cursor: pointer;

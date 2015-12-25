@@ -66,8 +66,14 @@
 
   var Meal = React.createClass({
     render: function () {
+      var classes = 'meal';
+
+      if (!this.props.click) {
+        classes += ' total';
+      }
+
       return (
-        <div className="meal" onClick={this.props.click}>
+        <div className={classes} onClick={this.props.click}>
           <div className="clear">
             <p className="calories">
               <PrettyNumber number={this.props.meal.calories} /> cal
@@ -197,12 +203,12 @@
     render: function () {
       var list = this.props.data.meals.concat(this.props.data.breakfasts);
       var selected = this.state.selectedMeals;
-      var day = '';
+      var total = '';
 
       if (selected.length) {
         var meal = calcStats(selected);
-        meal.name = 'DAY';
-        day = <Meal meal={meal} />;
+        meal.name = 'TOTAL';
+        total = <Meal meal={meal} />;
       }
 
       return (
@@ -218,7 +224,7 @@
               clickfn={this.addMeal} />
           </div>
           <div className="mc-panel">
-            {day}
+            {total}
             <MealList
               meals={this.state.selectedMeals}
               clickfn={this.removeMeal} />
