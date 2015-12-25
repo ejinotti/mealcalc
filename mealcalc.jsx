@@ -230,6 +230,11 @@
       return (
         <div className="clear">
           <div className="mc-panel">
+            <h1>Select Meals</h1>
+            <ul>
+              <li>Click meals to add to total.</li>
+              <li>Top meal is custom-made from dropdowns.</li>
+            </ul>
             <CustomMealBox
               proteins={this.props.data.proteins}
               carbs={this.props.data.carbs}
@@ -240,6 +245,11 @@
               clickfn={this.addMeal} />
           </div>
           <div className="mc-panel">
+            <h1>View Total Stats</h1>
+            <ul>
+              <li>Click meals to remove.</li>
+              <li>Or button to remove all.</li>
+            </ul>
             {total}
             <MealList
               meals={this.state.selectedMeals}

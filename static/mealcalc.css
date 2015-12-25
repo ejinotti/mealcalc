@@ -39,13 +39,25 @@ ul {
   }
 }
 
+.mc-panel > h1 {
+  font-size: large;
+  font-weight: bold;
+}
+
+.mc-panel > ul:first-of-type {
+  font-size: small;
+  list-style: disc;
+  list-style-position: inside;
+  margin: 10px 0;
+}
+
 #total-display {
   text-align: center;
   display: inline-block;
 }
 
 #total-display button {
-  background: inherit;
+  background: white;
   border-radius: 3px;
   font-weight: bold;
 }
@@ -54,6 +66,10 @@ ul {
   background: silver;
   color: white;
   cursor: pointer;
+}
+
+#total-display .meal {
+  margin-top: 0;
 }
 
 .meal {
