@@ -78,6 +78,7 @@ ul {
   border-radius: 3px;
   margin: 10px 0;
   text-align: left;
+  background: white;
 }
 
 .meal:not(.total):hover {

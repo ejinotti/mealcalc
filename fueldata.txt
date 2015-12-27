@@ -28,6 +28,7 @@ white rice 1cup,4.4,44.6,0.4,202
 white rice 3/4cup,3.3,33.45,0.3,161.15
 brown rice 1cup,5,44,1.8,215.4
 brown rice 3/4cup,3.75,33.6,1.35,161.15
+no carb,0,0,0,0
 
 veggies
 broccoli 1cup,3.7,11.2,0.6,55
