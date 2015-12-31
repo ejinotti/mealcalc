@@ -154,15 +154,13 @@
       this.props.update(e.target.value);
     },
     render: function () {
+      var options = this.props.items.map(function (item, i) {
+        return <option key={i} value={i}>{item.name}</option>;
+      });
+
       return (
         <select value={this.props.index} onChange={this.handleChange}>
-          {
-            this.props.items.map(function (item, i) {
-              return (
-                <option key={i} value={i}>{item.name}</option>
-              );
-            })
-          }
+          {options}
         </select>
       );
     }
@@ -172,21 +170,15 @@
     render: function () {
       var self = this;
 
-      return (
-        <ul>
-          {
-            this.props.meals.map(function (meal, i) {
-              return (
-                <li key={i}>
-                  <Meal
-                    meal={meal}
-                    click={self.props.clickfn(meal, i)} />
-                </li>
-              );
-            })
-          }
-        </ul>
-      );
+      var mealItems = this.props.meals.map(function (meal, i) {
+        return (
+          <li key={i}>
+            <Meal meal={meal} click={self.props.clickfn(meal, i)} />
+          </li>
+        );
+      });
+
+      return <ul>{mealItems}</ul>;
     }
   });
 
